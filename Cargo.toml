@@ -1,0 +1,9 @@
+[workspace]
+
+# cargo check is fine
+resolver = "3"
+
+members = [ 
+    "common",
+    "days/day-1"
+]
