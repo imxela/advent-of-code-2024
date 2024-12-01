@@ -1,2 +1,11 @@
+debug/
+target/
+
+Cargo.lock
+
+**/*.rs.bk
+
+*.pdb
+
 # seems like they prefer if you do not share your input ^^
 input
