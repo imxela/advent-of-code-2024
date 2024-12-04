@@ -4,8 +4,21 @@
 #[allow(clippy::missing_panics_doc)]
 pub fn read_input() -> String {
     let input_content: String =
-        std::fs::read_to_string(std::env::current_dir().unwrap().join("res/input"))
+        std::fs::read_to_string(std::env::current_dir().unwrap().join("res/inputs/input"))
             .expect("failed to read AoC input file!");
+
+    input_content
+}
+
+#[must_use]
+#[allow(clippy::missing_panics_doc)]
+pub fn read_example_input(part: usize) -> String {
+    let input_content: String = std::fs::read_to_string(
+        std::env::current_dir()
+            .unwrap()
+            .join(format!("res/inputs/example_input_p{part}")),
+    )
+    .expect("failed to read AoC example input file!");
 
     input_content
 }
