@@ -23,43 +23,76 @@ pub fn parse_values(input_string: &str) -> (Vec<usize>, Vec<usize>) {
     numbers
 }
 
-#[must_use]
-pub fn day_1_part_1() -> usize {
-    let input = common::read_input();
-    let (mut left, mut right) = parse_values(&input);
+use common::{AdventSolver, AdventSolverMut};
 
-    left.sort_unstable();
-    right.sort_unstable();
-
-    zip(left, right)
-        .map(|(left, right)| {
-            if left > right {
-                left - right
-            } else {
-                right - left
-            }
-        })
-        .sum()
+struct Day1Part1Solver {
+    data: (Vec<usize>, Vec<usize>),
 }
 
-#[must_use]
-pub fn day_1_part_2() -> usize {
-    let input = common::read_input();
-    let (left, right) = parse_values(&input);
+impl AdventSolverMut<usize, (Vec<usize>, Vec<usize>)> for Day1Part1Solver {
+    fn parse(input: &str) -> Self {
+        Self {
+            data: parse_values(input),
+        }
+    }
 
-    let sum = left
-        .iter()
-        .map(|left_number| {
-            let count = right
-                .iter()
-                .filter(|right_number| left_number == *right_number)
-                .count();
+    fn solve(&mut self) -> common::AdventSolution<usize> {
+        // This looks a bit awful...
+        let &mut (ref mut left, ref mut right) = &mut self.data;
 
-            left_number * count
-        })
-        .sum();
+        left.sort_unstable();
+        right.sort_unstable();
 
-    sum
+        let sum: usize = zip(left, right)
+            .map(|(left, right)| {
+                if left > right {
+                    *left - *right
+                } else {
+                    *right - *left
+                }
+            })
+            .sum();
+
+        sum.into()
+    }
+
+    fn data(&self) -> &(Vec<usize>, Vec<usize>) {
+        &self.data
+    }
+}
+
+struct Day1Part2Solver {
+    data: (Vec<usize>, Vec<usize>),
+}
+
+impl AdventSolver<usize, (Vec<usize>, Vec<usize>)> for Day1Part2Solver {
+    fn parse(input: &str) -> Self {
+        Self {
+            data: parse_values(input),
+        }
+    }
+
+    fn solve(&self) -> common::AdventSolution<usize> {
+        let (left, right) = &self.data;
+
+        let sum: usize = left
+            .iter()
+            .map(|left_number| {
+                let count = right
+                    .iter()
+                    .filter(|right_number| left_number == *right_number)
+                    .count();
+
+                left_number * count
+            })
+            .sum();
+
+        sum.into()
+    }
+
+    fn data(&self) -> &(Vec<usize>, Vec<usize>) {
+        &self.data
+    }
 }
 
 #[cfg(test)]
@@ -67,22 +100,48 @@ mod tests {
     use super::*;
 
     #[test]
+    fn test_day_1_part_1_example() {
+        let mut solver = Day1Part1Solver::parse(&common::read_example_input(1));
+        let solution = solver.solve();
+        assert!(solution.prove(&11));
+    }
+
+    #[test]
     fn test_day_1_part_1() {
-        assert!(day_1_part_1() == 765_748);
+        let mut solver = Day1Part1Solver::parse(&common::read_input());
+        let solution = solver.solve();
+        assert!(solution.prove(&765_748));
     }
 
     #[bench]
     fn bench_day_1_part_1(bencher: &mut test::Bencher) {
-        bencher.iter(day_1_part_1);
+        let mut solver = Day1Part1Solver::parse(&common::read_input());
+        bencher.iter(|| {
+            let solution = solver.solve();
+            assert!(solution.prove(&765_748));
+        });
+    }
+
+    #[test]
+    fn test_day_1_part_2_example() {
+        let solver = Day1Part2Solver::parse(&common::read_example_input(2));
+        let solution = solver.solve();
+        assert!(solution.prove(&31));
     }
 
     #[test]
     fn test_day_1_part_2() {
-        assert!(day_1_part_2() == 27_732_508);
+        let solver = Day1Part2Solver::parse(&common::read_input());
+        let solution = solver.solve();
+        assert!(solution.prove(&27_732_508));
     }
 
     #[bench]
     fn bench_day_1_part_2(bencher: &mut test::Bencher) {
-        bencher.iter(day_1_part_2);
+        let solver = Day1Part2Solver::parse(&common::read_input());
+        bencher.iter(|| {
+            let solution = solver.solve();
+            assert!(solution.prove(&27_732_508));
+        });
     }
 }

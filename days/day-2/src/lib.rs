@@ -5,6 +5,8 @@ extern crate test;
 
 use std::{cmp::Ordering, collections::BTreeMap};
 
+use common::{AdventSolver, AdventSolverMut};
+
 #[allow(clippy::missing_panics_doc)]
 #[must_use]
 pub fn parse_values(input_string: &str) -> Vec<Vec<usize>> {
@@ -40,20 +42,6 @@ fn validate_decrementing(levels: &[usize]) -> bool {
 
         current > next && diff > 0 && diff < 4
     })
-}
-
-#[must_use]
-pub fn day_2_part_1(input: &str) -> usize {
-    let input = parse_values(input);
-
-    input
-        .iter()
-        .filter(|levels| match levels[0].cmp(&levels[1]) {
-            Ordering::Greater => validate_decrementing(levels),
-            Ordering::Less => validate_incrementing(levels),
-            Ordering::Equal => false,
-        })
-        .count()
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
@@ -116,12 +104,62 @@ fn validate_levels(levels: &[usize], filter: bool) -> bool {
     true
 }
 
-#[must_use]
-pub fn day_2_part_2(input: &str) -> usize {
-    let input = parse_values(input);
+struct Day2Part1Solver {
+    data: Vec<Vec<usize>>,
+}
 
+impl AdventSolver<usize, Vec<Vec<usize>>> for Day2Part1Solver {
+    fn parse(input: &str) -> Self {
+        Self {
+            data: parse_values(input),
+        }
+    }
+
+    fn solve(&self) -> common::AdventSolution<usize> {
+        self.data
+            .iter()
+            .filter(|levels| match levels[0].cmp(&levels[1]) {
+                Ordering::Greater => validate_decrementing(levels),
+                Ordering::Less => validate_incrementing(levels),
+                Ordering::Equal => false,
+            })
+            .count()
+            .into()
+    }
+
+    fn data(&self) -> &Vec<Vec<usize>> {
+        &self.data
+    }
+}
+
+struct Day2Part2Solver {
+    data: Vec<Vec<usize>>,
+}
+
+impl AdventSolverMut<usize, Vec<Vec<usize>>> for Day2Part2Solver {
+    fn parse(input: &str) -> Self {
+        Self {
+            data: parse_values(input),
+        }
+    }
+
+    fn solve(&mut self) -> common::AdventSolution<usize> {
+        self.data
+            .iter_mut()
+            .filter(|levels| validate_levels(levels, true))
+            .count()
+            .into()
+    }
+
+    fn data(&self) -> &Vec<Vec<usize>> {
+        &self.data
+    }
+}
+
+#[must_use]
+pub fn day_2_part_2(input: &mut [Vec<usize>]) -> usize {
     input
-        .into_iter()
+        .iter_mut()
         .filter(|levels| validate_levels(levels, true))
         .count()
 }
@@ -132,34 +170,47 @@ mod tests {
 
     #[test]
     fn test_day_2_part_1_example() {
-        assert!(day_2_part_1(&common::read_example_input(1)) == 2);
+        let solver = Day2Part1Solver::parse(&common::read_example_input(1));
+        let solution = solver.solve();
+        assert!(solution.prove(&2));
     }
 
     #[test]
     fn test_day_2_part_1() {
-        assert!(day_2_part_1(&common::read_input()) == 502);
+        let solver = Day2Part1Solver::parse(&common::read_input());
+        let solution = solver.solve();
+        assert!(solution.prove(&502));
     }
 
     #[bench]
     fn bench_day_2_part_1(bencher: &mut test::Bencher) {
-        let input = common::read_input();
-        bencher.iter(|| day_2_part_1(&input));
+        let solver = Day2Part1Solver::parse(&common::read_input());
+        bencher.iter(|| {
+            let solution = solver.solve();
+            assert!(solution.prove(&502));
+        });
     }
 
     #[test]
     fn test_day_2_part_2_example() {
-        let result = day_2_part_2(&common::read_example_input(2));
-        assert!(result == 4);
+        let mut solver = Day2Part2Solver::parse(&common::read_example_input(2));
+        let solution = solver.solve();
+        assert!(solution.prove(&4));
     }
 
     #[test]
     fn test_day_2_part_2() {
-        assert!(day_2_part_2(&common::read_input()) == 544);
+        let mut solver = Day2Part2Solver::parse(&common::read_input());
+        let solution = solver.solve();
+        assert!(solution.prove(&544));
     }
 
     #[bench]
     fn bench_day_2_part_2(bencher: &mut test::Bencher) {
-        let input = common::read_input();
-        bencher.iter(|| day_2_part_2(&input));
+        let mut solver = Day2Part2Solver::parse(&common::read_input());
+        bencher.iter(|| {
+            let solution = solver.solve();
+            assert!(solution.prove(&544));
+        });
     }
 }
