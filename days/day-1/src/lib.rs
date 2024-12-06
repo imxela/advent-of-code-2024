@@ -103,14 +103,14 @@ mod tests {
     fn test_day_1_part_1_example() {
         let mut solver = Day1Part1Solver::parse(&common::read_example_input(1));
         let solution = solver.solve();
-        assert!(solution.prove(&11));
+        solution.prove(&11);
     }
 
     #[test]
     fn test_day_1_part_1() {
         let mut solver = Day1Part1Solver::parse(&common::read_input());
         let solution = solver.solve();
-        assert!(solution.prove(&765_748));
+        solution.prove(&765_748);
     }
 
     #[bench]
@@ -118,7 +118,7 @@ mod tests {
         let mut solver = Day1Part1Solver::parse(&common::read_input());
         bencher.iter(|| {
             let solution = solver.solve();
-            assert!(solution.prove(&765_748));
+            solution.prove(&765_748);
         });
     }
 
@@ -126,14 +126,14 @@ mod tests {
     fn test_day_1_part_2_example() {
         let solver = Day1Part2Solver::parse(&common::read_example_input(2));
         let solution = solver.solve();
-        assert!(solution.prove(&31));
+        solution.prove(&31);
     }
 
     #[test]
     fn test_day_1_part_2() {
         let solver = Day1Part2Solver::parse(&common::read_input());
         let solution = solver.solve();
-        assert!(solution.prove(&27_732_508));
+        solution.prove(&27_732_508);
     }
 
     #[bench]
@@ -141,7 +141,7 @@ mod tests {
         let solver = Day1Part2Solver::parse(&common::read_input());
         bencher.iter(|| {
             let solution = solver.solve();
-            assert!(solution.prove(&27_732_508));
+            solution.prove(&27_732_508);
         });
     }
 }

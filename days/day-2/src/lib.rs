@@ -172,14 +172,14 @@ mod tests {
     fn test_day_2_part_1_example() {
         let solver = Day2Part1Solver::parse(&common::read_example_input(1));
         let solution = solver.solve();
-        assert!(solution.prove(&2));
+        solution.prove(&2);
     }
 
     #[test]
     fn test_day_2_part_1() {
         let solver = Day2Part1Solver::parse(&common::read_input());
         let solution = solver.solve();
-        assert!(solution.prove(&502));
+        solution.prove(&502);
     }
 
     #[bench]
@@ -187,7 +187,7 @@ mod tests {
         let solver = Day2Part1Solver::parse(&common::read_input());
         bencher.iter(|| {
             let solution = solver.solve();
-            assert!(solution.prove(&502));
+            solution.prove(&502);
         });
     }
 
@@ -195,14 +195,14 @@ mod tests {
     fn test_day_2_part_2_example() {
         let mut solver = Day2Part2Solver::parse(&common::read_example_input(2));
         let solution = solver.solve();
-        assert!(solution.prove(&4));
+        solution.prove(&4);
     }
 
     #[test]
     fn test_day_2_part_2() {
         let mut solver = Day2Part2Solver::parse(&common::read_input());
         let solution = solver.solve();
-        assert!(solution.prove(&544));
+        solution.prove(&544);
     }
 
     #[bench]
@@ -210,7 +210,7 @@ mod tests {
         let mut solver = Day2Part2Solver::parse(&common::read_input());
         bencher.iter(|| {
             let solution = solver.solve();
-            assert!(solution.prove(&544));
+            solution.prove(&544);
         });
     }
 }

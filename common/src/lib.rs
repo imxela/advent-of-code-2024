@@ -28,6 +28,7 @@ pub fn read_example_input(part: usize) -> String {
 /// Represents a solution to an Advent of Code problem.
 /// The solution should have a single implementation for both steps in a day.
 /// Use `AdventSolution<T>::solve()` to test your solution.
+#[derive(Debug)]
 pub struct AdventSolution<T: PartialEq + Debug> {
     solution: T,
 }
@@ -40,8 +41,12 @@ impl<T: PartialEq + Debug> AdventSolution<T> {
     /// # Panics
     ///
     /// Will panic if `other` is not equal to the solution produced by the solver.
-    pub fn prove(&self, other: &T) -> bool {
-        self.solution == *other
+    pub fn prove(&self, other: &T) {
+        assert!(
+            self.solution == *other,
+            "Proof invalid: expected {other:?} but got {:?}!",
+            self.solution
+        );
     }
 }
 
