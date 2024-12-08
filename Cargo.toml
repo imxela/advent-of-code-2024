@@ -7,4 +7,4 @@ members = [
     "common",
     "days/day-1",
     "days/day-2"
-, "days/day-3"]
+, "days/day-3", "days/day-4"]
