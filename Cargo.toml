@@ -4,7 +4,10 @@
 resolver = "3"
 
 members = [ 
-    "common",
+    "common", 
     "days/day-1",
-    "days/day-2"
-, "days/day-3", "days/day-4"]
+    "days/day-2",
+    "days/day-3", 
+    "days/day-4",
+    "days/day-5",
+]
